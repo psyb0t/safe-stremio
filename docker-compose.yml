@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  safe-stremio:
+    image: psyb0t/safe-stremio:latest
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - WITH_OPENVPN=true
+      - USERNAME=user
+      - PASSWORD=pass
+    ports:
+      - "8080:80"
+    volumes:
+      - ./openvpn/config.ovpn:/vpn-config.ovpn
+      - ./openvpn/auth.txt:/vpn-auth.txt
+    restart: always
