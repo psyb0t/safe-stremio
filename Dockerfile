@@ -27,6 +27,7 @@ COPY nginx/default.conf /etc/nginx/sites/default.conf
 EXPOSE 80
 
 # Download and unzip the specific version of Stremio Web
+WORKDIR /stremio-web
 RUN curl -L "https://github.com/stremio/stremio-web/releases/download/${STREMIO_WEB_VERSION}/stremio-web.zip" -o stremio-web.zip \
     && unzip stremio-web.zip \
     && rm stremio-web.zip
