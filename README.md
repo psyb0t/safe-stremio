@@ -75,7 +75,7 @@ docker run -d \
 
 ### Final Steps
 
-After firing up your container, head over to your Stremio Web UI and navigate to Settings. Under Streaming, set your server URL to `http://yourdomain:8080/stremio-server`. This ensures your Stremio Web client talks to your self-hosted server. Now you're ready to stream like a true digital pirate.
+After firing up your container, head over to your Stremio Web UI and navigate to Settings. Under Streaming, set your server URL to `http://yourdomain:8080/stremio-server/`. This ensures your Stremio Web client talks to your self-hosted server. Now you're ready to stream like a true digital pirate.
 
 ## Nginx Configuration
 
