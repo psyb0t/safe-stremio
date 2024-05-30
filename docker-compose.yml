@@ -14,4 +14,16 @@ services:
     volumes:
       - ./openvpn/config.ovpn:/vpn-config.ovpn
       - ./openvpn/auth.txt:/vpn-auth.txt
-    restart: always
+    restart: unless-stopped
+
+  streamio:
+    image: stremio/server:latest
+    container_name: streamio
+    volumes:
+      - ./stremio:/root/.stremio-server
+    ports:
+      - 11470:11470
+      - 12470:12470
+    depends_on:
+      - safe-stremio
+    restart: unless-stopped
