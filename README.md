@@ -2,6 +2,25 @@
 
 Welcome to the future of secure, decentralized streaming! Safe-Stremio is your gateway to running Stremio Server and Stremio Web within a Docker container, wrapped in layers of security, anonymity, and badassery. This ain't your grandma's streaming setup—this is for digital pirates and cyberpunks who value privacy and control.
 
+**Note:** If you encounter the "Streaming Server is not available" error, make sure to check the [Final Steps](#final-steps) section for instructions on how to resolve it.
+
+## Table of Contents
+
+1. [Features](#features)
+2. [Get Up and Running](#get-up-and-running)
+   - [Docker Pull Command](#docker-pull-command)
+   - [Example Docker Compose](#example-docker-compose)
+   - [Basic Docker Run Command](#basic-docker-run-command)
+3. [Configuration](#configuration)
+   - [OpenVPN Setup](#openvpn-setup)
+   - [Environment Variables](#environment-variables)
+   - [Ports](#ports)
+4. [Final Steps](#final-steps)
+5. [Nginx Configuration](#nginx-configuration)
+6. [Logging and Monitoring](#logging-and-monitoring)
+7. [Entrypoint Script: run.sh](#entrypoint-script-runsh)
+8. [License](#license)
+
 ## Features
 
 - **Basic Authentication:** Protect your streaming kingdom with simple but effective access control.
