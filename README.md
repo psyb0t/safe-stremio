@@ -65,11 +65,32 @@ services:
     image: nginx:alpine
     ports:
       - "8080:80"
-    volumes:
-      - ./nginx/proxy.conf:/etc/nginx/nginx.conf:ro
+    configs:
+      - source: proxy_conf
+        target: /etc/nginx/nginx.conf
     depends_on:
       - safe-stremio
     restart: always
+
+configs:
+  proxy_conf:
+    content: |
+      events { worker_connections 1024; }
+      http {
+          server {
+              listen 80;
+              location / {
+                  proxy_pass http://safe-stremio:80;
+                  proxy_http_version 1.1;
+                  proxy_set_header Host $$host;
+                  proxy_set_header Upgrade $$http_upgrade;
+                  proxy_set_header Connection "upgrade";
+                  proxy_set_header X-Real-IP $$remote_addr;
+                  proxy_set_header X-Forwarded-For $$proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto $$scheme;
+              }
+          }
+      }
 ```
 
 ### Basic Docker Run Command
@@ -93,13 +114,32 @@ docker run -d \
   --restart always \
   psyb0t/safe-stremio:latest
 
+# Create nginx proxy config
+cat > /tmp/proxy.conf << 'EOF'
+events { worker_connections 1024; }
+http {
+    server {
+        listen 80;
+        location / {
+            proxy_pass http://safe-stremio:80;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+}
+EOF
+
 # Run the proxy for LAN access
-# See nginx/proxy.conf in this repo for the config file
 docker run -d \
   --name stremio-proxy \
   --network stremio-net \
   -p 8080:80 \
-  -v $(pwd)/nginx/proxy.conf:/etc/nginx/nginx.conf:ro \
+  -v /tmp/proxy.conf:/etc/nginx/nginx.conf:ro \
   --restart always \
   nginx:alpine
 ```
