@@ -41,8 +41,6 @@ docker pull psyb0t/safe-stremio:latest
 Spin up your secure streaming fortress with the following Docker Compose file:
 
 ```yaml
-version: "3.8"
-
 services:
   safe-stremio:
     image: psyb0t/safe-stremio:latest
@@ -52,29 +50,58 @@ services:
       - WITH_OPENVPN=true
       - USERNAME=user
       - PASSWORD=pass
-    ports:
-      - "8080:80"
     volumes:
       - ./openvpn/config.ovpn:/vpn-config.ovpn
       - ./openvpn/auth.txt:/vpn-auth.txt
+    restart: always
+
+  # Proxy for LAN/external access.
+  # When VPN is enabled, the safe-stremio container routes all traffic through
+  # the VPN tunnel. This breaks LAN access because responses to incoming
+  # requests try to route back through the VPN instead of the local network.
+  # This proxy runs outside the VPN container but on the same Docker network,
+  # so container-to-container traffic bypasses VPN routing entirely.
+  proxy:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/proxy.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - safe-stremio
     restart: always
 ```
 
 ### Basic Docker Run Command
 
-If you prefer running the container without Docker Compose, here's an example using basic Docker commands:
+If you prefer running the containers without Docker Compose (why tho?), here's how:
 
 ```sh
+# Create a network for the containers
+docker network create stremio-net
+
+# Run safe-stremio
 docker run -d \
+  --name safe-stremio \
+  --network stremio-net \
   --cap-add=NET_ADMIN \
   -e WITH_OPENVPN=true \
   -e USERNAME=user \
   -e PASSWORD=pass \
-  -p 8080:80 \
   -v $(pwd)/openvpn/config.ovpn:/vpn-config.ovpn \
   -v $(pwd)/openvpn/auth.txt:/vpn-auth.txt \
   --restart always \
   psyb0t/safe-stremio:latest
+
+# Run the proxy for LAN access
+# See nginx/proxy.conf in this repo for the config file
+docker run -d \
+  --name stremio-proxy \
+  --network stremio-net \
+  -p 8080:80 \
+  -v $(pwd)/nginx/proxy.conf:/etc/nginx/nginx.conf:ro \
+  --restart always \
+  nginx:alpine
 ```
 
 ### Configuration

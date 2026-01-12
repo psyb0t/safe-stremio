@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   safe-stremio:
     image: psyb0t/safe-stremio:latest
@@ -9,9 +7,24 @@ services:
       - WITH_OPENVPN=true
       - USERNAME=user
       - PASSWORD=pass
-    ports:
-      - "8080:80"
     volumes:
       - ./openvpn/config.ovpn:/vpn-config.ovpn
       - ./openvpn/auth.txt:/vpn-auth.txt
+    restart: always
+
+  # Proxy for LAN/external access.
+  # When VPN is enabled, the safe-stremio container routes all traffic through
+  # the VPN tunnel. This breaks LAN access because responses to incoming LAN
+  # requests try to route back through the VPN instead of the local network.
+  # This proxy runs outside the VPN container but on the same Docker network,
+  # so container-to-container traffic bypasses VPN routing entirely.
+  # Access Stremio from your LAN via http://<LAN_IP>:8088
+  proxy:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/proxy.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - safe-stremio
     restart: always

@@ -1,7 +1,7 @@
-FROM stremio/server:v4.20.8
+FROM stremio/server:v4.20.16
 
 # Define the build argument for the Stremio Web version
-ARG STREMIO_WEB_VERSION=v5.0.0-beta.8
+ARG STREMIO_WEB_VERSION=v5.0.0-beta.29
 
 # Install dependencies
 RUN apt-get update && \
