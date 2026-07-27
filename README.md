@@ -1,5 +1,9 @@
 # Safe-Stremio: Your Secure, Pirate-Friendly Streaming Solution
 
+[![version](https://raw.githubusercontent.com/psyb0t/safe-stremio/badges/version.svg)](https://github.com/psyb0t/safe-stremio/releases)
+[![license](https://raw.githubusercontent.com/psyb0t/safe-stremio/badges/license.svg)](LICENSE)
+[![Docker Pulls](https://img.shields.io/docker/pulls/psyb0t/safe-stremio?style=flat-square)](https://hub.docker.com/r/psyb0t/safe-stremio)
+
 Welcome to the future of secure, decentralized streaming! Safe-Stremio is your gateway to running Stremio Server and Stremio Web within a Docker container, wrapped in layers of security, anonymity, and badassery. This ain't your grandma's streaming setup—this is for digital pirates and cyberpunks who value privacy and control.
 
 **Note:** If you encounter the "Streaming Server is not available" error, make sure to check the [Final Steps](#final-steps) section for instructions on how to resolve it.
