@@ -1,2 +1,5 @@
 openvpn
 git-update.sh
+
+# Local tooling scratch
+.telemetry/
