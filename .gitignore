@@ -1,5 +1,8 @@
 openvpn
 git-update.sh
 
+# Container notes written by local tooling, not a project artifact
+CLAUDE.md
+
 # Local tooling scratch
 .telemetry/

@@ -2,6 +2,24 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.2.5 — 2026-08-01
+
+Infrastructure only. No changes to the image or its behavior.
+
+- Mirror the repo to Codeberg alongside GitLab on every branch and tag push,
+  and archive it to the Wayback Machine, Software Heritage and archive.org.
+  Pull requests are switched off on both mirrors — they are force-pushed from
+  GitHub, so anything merged there is destroyed by the next sync; issues and
+  forking stay on.
+- Pull issues opened on either mirror back into GitHub every six hours, and
+  close them here when the original closes. The scheduled run jitters to avoid
+  hammering both mirrors at the same minute; a manual run does not.
+- Split the mirroring, archiving and issue-pull jobs out of `pipeline.yml` into
+  their own workflow files.
+- Added `.dockerignore` so the local scratch dir stays out of the build context.
+- Ignore `CLAUDE.md`, a container-notes file written by local tooling and not a
+  project artifact.
+
 ## v0.2.4 — 2026-07-27
 
 - Added a GitHub Actions CI status badge to the README.
