@@ -7,3 +7,4 @@ git-update.sh
 
 # Local config overrides at any depth
 *.local.json
+git-update.sh.debot
