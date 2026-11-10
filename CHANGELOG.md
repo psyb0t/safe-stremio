@@ -2,6 +2,17 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.2.6 — 2026-11-10
+
+- The documentation is published at https://psyb0t.github.io/safe-stremio/, and
+  the reference material moved there from the README.
+- CI runs lint (shellcheck, shfmt, actionlint) and a container smoke test on
+  every branch push, and `make lint` and `make test` run the same checks
+  locally with only Docker. A push to master also publishes a `:sha-<commit>`
+  image, and a version tag promotes that exact image instead of rebuilding it.
+- Buy Me a Coffee is in the funding links, and `AGENTS.md` plus project rules
+  in `.agents/rules/` are committed for coding agents.
+
 ## v0.2.5 — 2026-08-01
 
 Infrastructure only. No changes to the image or its behavior.

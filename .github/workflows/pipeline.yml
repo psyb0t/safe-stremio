@@ -1,21 +1,78 @@
 name: pipeline
 
+# Every push runs lint (shellcheck, shfmt, actionlint) and the container smoke
+# test. A push to master then builds the image and publishes :latest and
+# :sha-<commit>. A v* tag waits for that commit's master run to succeed,
+# promotes the same image digest to the release tag without rebuilding, and
+# cuts the GitHub Release.
 on: [push]
 
+permissions: {}
+
 jobs:
+  # Both commands run in Docker, so the runner needs only Docker and Make.
+  # No credentials.
+  code:
+    if: "!startsWith(github.ref, 'refs/tags/')"
+    permissions:
+      contents: read
+      security-events: write # the called workflow requests it for SARIF uploads
+    uses: psyb0t/reusable-github-workflows/.github/workflows/code-workflow.yml@master
+    with:
+      lint_command: "make lint"
+      test_command: "make test"
+
+  # Self-hosted version and license SVG badges committed to the `badges` branch.
   badges:
-    if: github.ref_name == github.event.repository.default_branch || startsWith(github.ref, 'refs/tags/')
+    needs: [code, wait]
+    if: "always() && ((github.ref_name == github.event.repository.default_branch && needs.code.result == 'success') || (startsWith(github.ref, 'refs/tags/') && needs.wait.result == 'success'))"
     permissions:
       contents: write
     uses: psyb0t/reusable-github-workflows/.github/workflows/create-badges.yml@master
 
+  # The called workflow builds only on master and tags, so other branches stop
+  # after the code job.
   call-docker-image-workflow:
+    needs: [code]
+    if: "!startsWith(github.ref, 'refs/tags/')"
+    permissions:
+      contents: write
+      security-events: write # upload the Grype SARIF to the Security tab
     uses: psyb0t/reusable-github-workflows/.github/workflows/docker-image-workflow.yml@master
-
     with:
       repository_name: psyb0t/safe-stremio
       target_platforms: "linux/amd64,linux/arm64"
-
+      push_sha_tag: true
     secrets:
       dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
       dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  wait:
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      actions: read
+    uses: psyb0t/reusable-github-workflows/.github/workflows/wait-for-default-branch.yml@master
+
+  docker-promote:
+    needs: [wait]
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: write
+      security-events: write
+    uses: psyb0t/reusable-github-workflows/.github/workflows/docker-image-workflow.yml@master
+    with:
+      repository_name: psyb0t/safe-stremio
+      target_platforms: "linux/amd64,linux/arm64"
+      promote_on_tag: true
+      # The release job below cuts the release from the tag's own notes.
+      create_release: false
+    secrets:
+      dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+      dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  release:
+    needs: [docker-promote]
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: write
+    uses: psyb0t/reusable-github-workflows/.github/workflows/release-workflow.yml@master

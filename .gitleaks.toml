@@ -1,0 +1,3 @@
+# Secret scanning: gitleaks default rules over the files being released.
+[extend]
+useDefault = true
