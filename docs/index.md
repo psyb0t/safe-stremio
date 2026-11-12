@@ -7,7 +7,9 @@ seo:
   type: WebSite
 ---
 
-# Safe-Stremio: Your Secure, Pirate-Friendly Streaming Solution
+# Safe-Stremio
+
+**Your Secure, Pirate-Friendly Streaming Solution**
 
 safe-stremio runs [Stremio Server](https://hub.docker.com/r/stremio/server) and the [Stremio Web](https://github.com/stremio/stremio-web) UI in one Docker container, behind nginx. Your server, your rules. nginx puts HTTP basic auth and a per-IP rate limit in front of both, and an optional OpenVPN client sends the container's traffic through your VPN so your real IP stays out of it.
 

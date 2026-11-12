@@ -5,7 +5,7 @@ sitemap: false
 search_exclude: true
 nav_exclude: true
 ---
-# Safe-Stremio: Your Secure, Pirate-Friendly Streaming Solution
+# Safe-Stremio
 
 > {{ site.description }}
 

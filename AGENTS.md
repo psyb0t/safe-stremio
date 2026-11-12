@@ -55,7 +55,8 @@ Request flow: client -> (Compose proxy :8080) -> nginx :80 -> static UI from `/s
 | `scripts/smoke-test.sh` | Container smoke test run by `make test`. |
 | `Makefile` | Lint, test, build and docs targets. |
 | `docs/` | The documentation site, published at https://psyb0t.github.io/safe-stremio/. |
-| `.agents/rules/` | Rules for every change. |
+| `.agents/rules/` | Rules for every change, loaded every session. |
+| `.agents/rule-details/` | Area rules, read before touching the paths listed under Rules. |
 | `.github/workflows/pipeline.yml` | CI: lint and smoke test, image build, tag promotion, release, badges. |
 | `.github/workflows/mirror-and-archive.yml`, `issue-pull.yml`, `collaborators-only.yml` | Mirroring and archiving, issue sync from the mirrors, and closing pull requests from non-collaborators. Not part of the build. |
 | `openvpn/` | Local VPN config and credentials. Gitignored; never commit or read it. |
@@ -75,4 +76,12 @@ make docs    # build the site into .testing/docs-site
 
 ## Rules
 
-Rules for every change: `.agents/rules/`. Read the ones that match what you are touching before editing.
+Rules for every change: `.agents/rules/` (loaded every session). Area rules live in `.agents/rule-details/`; read the matching file before touching its paths:
+
+| File | Read before touching |
+| --- | --- |
+| `.agents/rule-details/docker-image.md` | `Dockerfile`, `nginx/`, `docker-compose.yml` |
+| `.agents/rule-details/shell-style.md` | `run.sh`, `scripts/*.sh` |
+| `.agents/rule-details/testing.md` | `scripts/smoke-test.sh`, `Makefile` test targets |
+| `.agents/rule-details/ci.md` | `.github/workflows/` |
+| `.agents/rule-details/docs-and-releases.md` | `README.md`, `docs/`, `CHANGELOG.md`, release tags |

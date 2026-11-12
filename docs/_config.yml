@@ -1,4 +1,5 @@
-title: "Safe-Stremio: Your Secure, Pirate-Friendly Streaming Solution"
+title: Safe-Stremio
+tagline: Your Secure, Pirate-Friendly Streaming Solution
 tagline: Stremio Server and Web behind nginx auth, a rate limit and an optional VPN
 description: Docker image that runs Stremio Server and Stremio Web behind nginx, with optional basic auth, a per-IP rate limit and an optional OpenVPN client.
 lang: en

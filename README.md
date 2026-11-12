@@ -1,4 +1,6 @@
-# Safe-Stremio: Your Secure, Pirate-Friendly Streaming Solution
+# Safe-Stremio
+
+**Your Secure, Pirate-Friendly Streaming Solution**
 
 [![CI](https://github.com/psyb0t/safe-stremio/actions/workflows/pipeline.yml/badge.svg?branch=master)](https://github.com/psyb0t/safe-stremio/actions/workflows/pipeline.yml)
 [![version](https://raw.githubusercontent.com/psyb0t/safe-stremio/badges/version.svg)](https://github.com/psyb0t/safe-stremio/releases)
